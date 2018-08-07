@@ -92,5 +92,7 @@ s - Seconds, with leading zeros (00 to 59)
 u - Microseconds with leading zeros (00 to 1000)
 
 # Examples
-```d = new Shamsi('2018-01-01');
-d.format('Y-m-d')```
+```
+d = new Shamsi('2018-01-01');
+d.format('Y-m-d')
+```
