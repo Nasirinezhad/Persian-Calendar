@@ -97,3 +97,7 @@ u - Microseconds with leading zeros (00 to 1000)
 d = new Shamsi('2018-01-01');
 d.format('Y-m-d')
 ```
+```
+d = new Shamsi();
+d.getDate()
+```
