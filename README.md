@@ -4,40 +4,143 @@ A javascript class for persian calendar
 'Shamsi' work same as 'Date'
 
 # Methods
-calculatTime(Timestamp)	    This method calculat persian date
+getDate()
+Returns the day of the month (1–31) for the specified date according to local time.
 
-getFullYear()	    Get the year as a four digit number (yyyy)
+getDay()
+Returns the day of the week (0–6) for the specified date according to local time.
 
-getYearIsLeap()	    Get the year is a leap year or no (boolean)
+getFullYear()
+Returns the year (4 digits for 4-digit years) of the specified date according to local time.
 
-getMonth()	        Get the month as a number (0-11)
+getHours()
+Returns the hour (0–23) in the specified date according to local time.
 
-getMonthName()	    Get the month name as a string (in persian)
+getMilliseconds()
+Returns the milliseconds (0–999) in the specified date according to local time.
 
-getMonthDays()	    Get the total of month days as a number (29, 30, 31)
+getMinutes()
+Returns the minutes (0–59) in the specified date according to local time.
 
-getDate()    	    Get the day as a number (1-31)
+getMonth()
+Returns the month (0–11) in the specified date according to local time.
 
-getDateName()    	Get the Persian textual the day of the month (in persian)
+getSeconds()
+Returns the seconds (0–59) in the specified date according to local time.
 
-getHours()   	    Get the hour (0-23)
+getTime()
+Returns the numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC. (Negative values are returned for prior times.)
 
-getMinutes()	        Get the minute (0-59)
+getTimezoneOffset()
+Returns the time-zone offset in minutes for the current locale.
 
-getSeconds()	        Get the second (0-59)
+getUTCDate()
+Returns the day (date) of the month (1–31) in the specified date according to universal time.
 
-getMilliseconds()	Get the millisecond (0-999)
+getUTCDay()
+Returns the day of the week (0–6) in the specified date according to universal time.
 
-getTime()	        Get the time (milliseconds since 1 Farvardin , 1396)
+getUTCFullYear()
+Returns the year (4 digits for 4-digit years) in the specified date according to universal time.
 
-getDay()	            Get the weekday as a number (0-6)
+getUTCHours()
+Returns the hours (0–23) in the specified date according to universal time.
 
-getDayName()	        Get the weekday name as a string (in persian)
+getUTCMilliseconds()
+Returns the milliseconds (0–999) in the specified date according to universal time.
 
-getDayShortName()	Get the weekday short name as a string (in persian)
+getUTCMinutes()
+Returns the minutes (0–59) in the specified date according to universal time.
 
-format()             Get the date in a custom format
+getUTCMonth()
+Returns the month (0–11) in the specified date according to universal time.
 
+getUTCSeconds()
+Returns the seconds (0–59) in the specified date according to universal time.
+
+getYear()
+Returns the year (usually 2–3 digits) in the specified date according to local time. Use getFullYear() instead.
+
+setDate()
+Sets the day of the month for a specified date according to local time.
+
+setFullYear()
+Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to local time.
+
+setHours()
+Sets the hours for a specified date according to local time.
+
+setMilliseconds()
+Sets the milliseconds for a specified date according to local time.
+
+setMinutes()
+Sets the minutes for a specified date according to local time.
+
+setMonth()
+Sets the month for a specified date according to local time.
+
+setSeconds()
+Sets the seconds for a specified date according to local time.
+
+setTime()
+Sets the Date object to the time represented by a number of milliseconds since January 1, 1970, 00:00:00 UTC. Use negative numbers for times prior.
+
+setUTCDate()
+Sets the day of the month for a specified date according to universal time.
+
+setUTCFullYear()
+Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to universal time.
+
+setUTCHours()
+Sets the hour for a specified date according to universal time.
+
+setUTCMilliseconds()
+Sets the milliseconds for a specified date according to universal time.
+
+setUTCMinutes()
+Sets the minutes for a specified date according to universal time.
+
+setUTCMonth()
+Sets the month for a specified date according to universal time.
+
+setUTCSeconds()
+Sets the seconds for a specified date according to universal time.
+
+setYear()
+Sets the year (usually 2–3 digits) for a specified date according to local time. Use setFullYear() instead.
+
+toDateString()
+Returns the "date" portion of the Date as a human-readable string like 'Thu Apr 12 2018'.
+
+toISOString()
+Converts a date to a string following the ISO 8601 Extended Format.
+
+toJSON()
+Returns a string representing the Date using toISOString(). Intended for use by JSON.stringify().
+
+toGMTString()
+Returns a string representing the Date based on the GMT (UTC) time zone. Use toUTCString() instead.
+
+toLocaleDateString()
+Returns a string with a locality sensitive representation of the date portion of this date based on system settings.
+
+toLocaleString()
+Returns a string with a locality-sensitive representation of this date. Overrides the Object.prototype.toLocaleString() method.
+
+toLocaleTimeString()
+Returns a string with a locality-sensitive representation of the time portion of this date, based on system settings.
+
+toString()
+Returns a string representing the specified Date object. Overrides the Object.prototype.toString() method.
+
+toTimeString()
+Returns the "time" portion of the Date as a human-readable string.
+
+toUTCString()
+Converts a date to a string using the UTC timezone.
+
+valueOf()
+Returns the primitive value of a Date object. Overrides the Object.prototype.valueOf() method.
 /////////////////////////////////////////////////////
 
 format letters

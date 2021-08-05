@@ -1,0 +1,22 @@
+{
+  "name": "persian-calendar",
+  "version": "1.0.0",
+  "description": "A javascript class for persian calendar",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nasirinezhad/Persian-Calendar.git"
+  },
+  "author": "Nasirirnezhad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nasirinezhad/Persian-Calendar/issues"
+  },
+  "homepage": "https://github.com/Nasirinezhad/Persian-Calendar#readme",
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
+}
