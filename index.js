@@ -5,45 +5,93 @@ class Shamsi extends Date {
     constructor(year, month, day, hours, minutes, seconds, milliseconds) {
         if (typeof year === 'number') {
             if (typeof month === 'number') {
-                
-                this.from(year, month, day, hours, minutes, seconds, milliseconds)
-            } else {
-                this.PTimeStamp = year - 38349000000;
-            }
-        }
-        if (typeof year === 'string') {
-            this.GDate = new Date(year);
-            this.PTimeStamp = this.GDate.getTime() - 38349000000;
-        }
-        if (typeof this.GDate === 'undefined' || !this.GDate) {
-            this.GDate = new Date();
-            this.PTimeStamp = this.GDate.getTime() - 38349000000;
-        }
-        
+                let ts = Shamsi.#parse(year, month, day, hours, minutes, seconds, milliseconds)
+                if(ts.next().value){
+                    super(ts.next());
 
+                    let obj = ts.next().value
+                    this.year = obj.year
+                    this.isLeap = obj.isLeap
+                    this.month = obj.month
+                    this.dayofyear = obj.dayofyear
+                    this.day = obj.day
+                    this.date = obj.date
+                    this.hours = obj.hours
+                    this.minutes = obj.minutes
+                    this.seconds = obj.seconds
+                    this.milliseconds = obj.milliseconds
+                    this.PTimeStamp = obj.PTimeStamp
+                }
+            } else {
+                super(year + 38349000000);
+                this.PTimeStamp = year; //timestamp since 1350/1/1 00:00
+                this.calculatTime(this.PTimeStamp)
+            }
+        }else {
+            super();
+            this.PTimeStamp = super.getTime() - 38349000000; //timestamp since 1350/1/1 00:00
+            this.calculatTime(this.PTimeStamp)
+        }
         
-        this.isLeap = isLeap
-        this.day = (this.dayofyear) % 7
     }
-    convert(year, month, day, hours, minutes, seconds, milliseconds) {
+    static* #parse(year, month, day, hours, minutes, seconds, milliseconds)
+    {
+
+        year = Number(year)
+        month = Number(month) || 0
+        day = Number(day) || 0
+        hours = Number(hours) || 0
+        minutes = Number(minutes) || 0
+        seconds = Number(seconds) || 0
+        milliseconds = Number(milliseconds) || 0
+
+        if(month < 1 || month > 12 || day < 1 || day > 31 || hours < 0 || hours > 24 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59 || milliseconds < 0 || milliseconds > 999)
+            yield false;
+
+        let isLeap = year % 4 === (2 + (year > 1370));
+
+        if(month == 12 && day > (29 + isLeap))
+            yield false;
+        if(month > 6 && day > 30)
+            yield false;
+        let tl = Math.floor(year / 4) - (year > 1370 && isLeap ? 1:0);// total of leap years
+        let dayofyear = (month-1)*30 + (month < 7 ? (month-1) : 6) + day
+    
+        yield true;
+
+        let timestamp = (((((year - 1350) * 365 + dayofyear + tl - 338) * 24 + hours) * 60 + minutes) * 60 + seconds) * 1000 + milliseconds
+        yield timestamp + 38349000000;
+
+        yield {
+            year: year,
+            isLeap: isLeap,
+            month: month-1,
+            dayofyear: dayofyear,
+            day: (dayofyear + tl) % 7,
+            date: day,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds,
+            milliseconds: milliseconds,
+            PTimeStamp: timestamp
+        }
+    }
+
+    static convert(year, month, day, hours, minutes, seconds, milliseconds) {
+        let GDate = null;
         if (typeof year === 'number') {
             if (typeof month === 'number') {
-                this.GDate = new Date(year, month, day, hours, minutes, seconds, milliseconds);
-                this.PTimeStamp = this.GDate.getTime() - 38349000000; //since 1350/1/1 00:00
+                GDate = new Date(year, month, day, hours, minutes, seconds, milliseconds);
             } else {
-                this.GDate = Date(year);
-                this.PTimeStamp = year - 38349000000;
+                GDate = Date(year)
             }
+        }else{
+            GDate = new Date(year)
         }
-        if (typeof year === 'string') {
-            this.GDate = new Date(year);
-            this.PTimeStamp = this.GDate.getTime() - 38349000000;
-        }
-        if (typeof this.GDate === 'undefined' || !this.GDate) {
-            this.GDate = new Date();
-            this.PTimeStamp = this.GDate.getTime() - 38349000000;
-        }
-        this.calculatTime(this.PTimeStamp);
+        return new Shamsi(GDate.getTime() - 38349000000)
+    }
+    convert() {
+        return new Date(this.PTimeStamp + 38349000000)
     }
     calculatTime(t) {
         //let t = this.PTimeStamp;
@@ -70,38 +118,6 @@ class Shamsi extends Date {
             this.date = this.dayofyear - (this.month * 31);
             this.hours++ // summer clock
         }
-    }
-    from(year, month, day, hours, minutes, seconds, milliseconds)
-    {
-        year = Number(year)
-        month = Number(month)
-        day = Number(day)
-        hours = Number(hours)
-        minutes = Number(minutes)
-        seconds = Number(seconds)
-        milliseconds = Number(milliseconds)
-        if(month < 1 || month > 12 || day < 1 || day > 31 || hours < 0 || hours > 24 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59 || milliseconds < 0 || milliseconds > 999)
-            return false;
-
-        let isLeap = year % 4 === (2 + (year > 1370));
-        let tl = year + Math.floor(year / 4) - (year > 1370 && isLeap ? 1:0);// total of leap years
-
-        if(month == 12 && day > (29 + isLeap))
-            return false;
-        if(month > 6 && day > 30)
-            return false;
-
-        this.year = year;
-        this.isLeap = isLeap
-        this.month = month-1;
-        this.dayofyear = this.month*30 + (this.month < 6 ? this.month : 6) + day
-        this.day = (this.dayofyear+ tl) % 7
-        this.date = day
-        this.hours = hours;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        this.milliseconds = milliseconds;
-        return true;
     }
 
     getFullYear() {
