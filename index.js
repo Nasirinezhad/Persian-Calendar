@@ -6,36 +6,79 @@ class Shamsi extends Date {
         if (typeof year === 'number') {
             if (typeof month === 'number') {
                 let ts = Shamsi.#parse(year, month, day, hours, minutes, seconds, milliseconds)
-                if(ts.next().value){
+                if (ts.next().value) {
                     super(ts.next());
-
-                    let obj = ts.next().value
-                    this.year = obj.year
-                    this.isLeap = obj.isLeap
-                    this.month = obj.month
-                    this.dayofyear = obj.dayofyear
-                    this.day = obj.day
-                    this.date = obj.date
-                    this.hours = obj.hours
-                    this.minutes = obj.minutes
-                    this.seconds = obj.seconds
-                    this.milliseconds = obj.milliseconds
-                    this.PTimeStamp = obj.PTimeStamp
+                    this.#setter(ts.next().value)
                 }
             } else {
                 super(year + 38349000000);
                 this.PTimeStamp = year; //timestamp since 1350/1/1 00:00
                 this.calculatTime(this.PTimeStamp)
             }
-        }else {
+        } else if (typeof year === 'string') {
+            let prs = year.split(/([0-9]+)/)
+            let hms = year.split(/([01]?\d|2[0-3]):([0-5]\d):([0-5]\d)/)
+            let obj = {}
+            prs.forEach(i => {
+                if (!obj.day || !obj.month || !obj.year) {
+                    prs[i] = String(prs[i]).trimEnd().trimRight()
+                    if (MonthNames.includes(prs[i])) {
+                        obj.month = a.indexOf('ass')
+                    } else if (Number(prs[i])) {
+                        if (Number(prs[i]) > 1350) {
+                            obj.year = Number(prs[i])
+                        } else if (!obj.month && Number(prs[i]) < 13) {
+                            obj.month = Number(prs[i])
+                        } else {
+                            obj.day = Number(prs[i])
+                        }
+                    }
+                }
+            })
+            hms.forEach(i => {
+                if (Number(hms[i])) {
+                    if (obj.hours) {
+                        if (obj.minutes) {
+                            if (obj.seconds) {
+                                if (!obj.milliseconds) {
+                                    obj.milliseconds = Number(hms[i])
+                                }
+                            } else {
+                                obj.seconds = Number(hms[i])
+                            }
+                        } else {
+                            obj.minutes = Number(hms[i])
+                        }
+                    } else {
+                        obj.hours = Number(hms[i])
+                    }
+                }
+            })
+            let ts = Shamsi.#parse(obj.year, obj.month, obj.day, obj.hours, obj.minutes, obj.seconds, obj.milliseconds)
+            if (ts.next().value) {
+                super(ts.next());
+                this.#setter(ts.next().value)
+            }
+        } else {
             super();
             this.PTimeStamp = super.getTime() - 38349000000; //timestamp since 1350/1/1 00:00
             this.calculatTime(this.PTimeStamp)
         }
-        
     }
-    static* #parse(year, month, day, hours, minutes, seconds, milliseconds)
-    {
+    #setter(obj) {
+        this.year = obj.year
+        this.isLeap = obj.isLeap
+        this.month = obj.month
+        this.dayofyear = obj.dayofyear
+        this.day = obj.day
+        this.date = obj.date
+        this.hours = obj.hours
+        this.minutes = obj.minutes
+        this.seconds = obj.seconds
+        this.milliseconds = obj.milliseconds
+        this.PTimeStamp = obj.PTimeStamp
+    }
+    static * #parse(year, month, day, hours, minutes, seconds, milliseconds) {
 
         year = Number(year)
         month = Number(month) || 0
@@ -45,27 +88,28 @@ class Shamsi extends Date {
         seconds = Number(seconds) || 0
         milliseconds = Number(milliseconds) || 0
 
-        if(month < 1 || month > 12 || day < 1 || day > 31 || hours < 0 || hours > 24 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59 || milliseconds < 0 || milliseconds > 999)
+        if (month < 1 || month > 12 || day < 1 || day > 31 || hours < 0 || hours > 24 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59 || milliseconds < 0 || milliseconds > 999)
             yield false;
 
         let isLeap = year % 4 === (2 + (year > 1370));
 
-        if(month == 12 && day > (29 + isLeap))
+        if (month == 12 && day > (29 + isLeap))
             yield false;
-        if(month > 6 && day > 30)
+        if (month > 6 && day > 30)
             yield false;
-        let tl = Math.floor(year / 4) - (year > 1370 && isLeap ? 1:0);// total of leap years
-        let dayofyear = (month-1)*30 + (month < 7 ? (month-1) : 6) + day
-    
+        let tl = Math.floor(year / 4) - (year > 1370 && isLeap ? 1 : 0);// total of leap years
+        let dayofyear = (month - 1) * 30 + (month < 7 ? (month - 1) : 6) + day
+
         yield true;
 
         let timestamp = (((((year - 1350) * 365 + dayofyear + tl - 338) * 24 + hours) * 60 + minutes) * 60 + seconds) * 1000 + milliseconds
-        yield timestamp + 38349000000;
+        if (month)
+            yield timestamp + 38349000000;
 
         yield {
             year: year,
             isLeap: isLeap,
-            month: month-1,
+            month: month - 1,
             dayofyear: dayofyear,
             day: (dayofyear + tl) % 7,
             date: day,
@@ -85,7 +129,7 @@ class Shamsi extends Date {
             } else {
                 GDate = Date(year)
             }
-        }else{
+        } else {
             GDate = new Date(year)
         }
         return new Shamsi(GDate.getTime() - 38349000000)
@@ -105,7 +149,7 @@ class Shamsi extends Date {
         t = (t - this.hours) / 24;
         this.day = (1 + t) % 7;
         let ty = Math.floor(t / 365);
-        let tl = Math.floor((ty-(ty > 20 ? 1: 0)) / 4);// total of leap years
+        let tl = Math.floor((ty - (ty > 20 ? 1 : 0)) / 4);// total of leap years
         t -= tl;
         this.dayofyear = t % 365;
         this.year = 1350 + Math.floor(t / 365);
@@ -114,7 +158,7 @@ class Shamsi extends Date {
             this.month = 6 + Math.floor((this.dayofyear - 187) / 30);
             this.date = this.dayofyear - (6 + this.month * 30);
         } else {
-            this.month = Math.floor((this.dayofyear-1) / 31);
+            this.month = Math.floor((this.dayofyear - 1) / 31);
             this.date = this.dayofyear - (this.month * 31);
             this.hours++ // summer clock
         }
@@ -130,14 +174,14 @@ class Shamsi extends Date {
         return this.month;
     }
     getMonthName() {
-        return this.MonthNames[this.month];
+        return MonthNames[this.month];
     }
     getMonthDays() {
         return this.MonthDays(this.month, this.month)
     }
     prevMonthDays() {
-        if(this.month == 12)
-            return this.MonthDays(1, this.month-1)
+        if (this.month == 12)
+            return this.MonthDays(1, this.month - 1)
         return this.MonthDays(this.month, this.month)
     }
     MonthDays(m, y) {
@@ -205,10 +249,10 @@ class Shamsi extends Date {
         return this.day;
     }
     getDayName() {
-        return this.WeekDays[this.day];
+        return WeekDays[this.day];
     }
     getDayShortName() {
-        return this.WeekDays[this.day].slice(0,1);
+        return WeekDays[this.day].slice(0, 1);
     }
 
     format(str) {
@@ -236,6 +280,12 @@ class Shamsi extends Date {
                         break;
                     case 'w':
                         result += this.day;
+                        break;
+                    case 'W':
+                        result += this.getDayName();
+                        break;
+                    case 'Q':
+                        result += this.getDayShortName();
                         break;
                     case 'z':
                         result += this.dayofyear;
@@ -302,6 +352,10 @@ class Shamsi extends Date {
             }
         }
         return result;
+    }
+
+    toString() {
+        return this.format('Q d F Y H:i:s') + ' (In Shamsi format)'
     }
 }
 
