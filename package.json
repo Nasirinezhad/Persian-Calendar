@@ -4,7 +4,8 @@
   "description": "A javascript class for persian calendar",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "uglify": "uglifyjs -o min/persian-calendar.min.js --compress --mangle -- index.js "
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/Nasirinezhad/Persian-Calendar#readme",
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "uglify-js": "^3.15.4"
   }
 }
